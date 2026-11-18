@@ -32,7 +32,7 @@ export const site = {
     "I turn complex problems into simple, reliable products — from the first wireframe to the last deploy.",
   description:
     "Portfolio of Eugene Brown, a full-stack developer focused on performance, accessibility and thoughtful interface design.",
-  email: "hello@example.com",
+  email: "eugenebrown4life@yahoo.com",
   url: resolveSiteUrl(),
   nav: [
     { href: "/projects", label: "Projects" },
@@ -41,9 +41,7 @@ export const site = {
     { href: "/contact", label: "Contact" },
   ] satisfies readonly NavItem[],
   socials: [
-    { label: "GitHub", href: "https://github.com/yourusername", icon: "github" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/yourusername", icon: "linkedin" },
-    { label: "X", href: "https://x.com/yourusername", icon: "x" },
-    { label: "Email", href: "mailto:hello@example.com", icon: "mail" },
+    { label: "GitHub", href: "https://github.com/Browntech24", icon: "github" },
+    { label: "Email", href: "mailto:eugenebrown4life@yahoo.com", icon: "mail" },
   ] satisfies readonly SocialLink[],
 } as const;

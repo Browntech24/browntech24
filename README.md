@@ -13,8 +13,8 @@ theme with no flash, base UI components, header/footer, security headers, lint/f
 
 **Milestone 3 — MDX content pipeline.** Done: `content/projects` and `content/blog` MDX sources,
 Zod-validated frontmatter, statically generated index and detail pages, reading time, draft filtering
-and adjacent-project navigation. Brand and professional name are set in `lib/site.ts`; the email,
-domain and social URLs there are still placeholders.
+and adjacent-project navigation. Brand, professional name, email and GitHub are set in `lib/site.ts`;
+the site URL and the remaining social profiles are still placeholders.
 
 ## Decisions
 
@@ -88,7 +88,7 @@ and detail pages are statically generated at build time.
 
 ## Content to replace before launch
 
-- `lib/site.ts` — name, initials, role, intro, email, domain, social URLs
+- `lib/site.ts` — site URL, LinkedIn and X profiles
 - Headshot, project covers, `public/resume.pdf`
 - Replace the sample case studies and posts in `content/` with real writing
 - Domain and real accent assets (milestone 8)

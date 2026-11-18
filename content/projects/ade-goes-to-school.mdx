@@ -1,0 +1,81 @@
+---
+title: "Ade Goes to School"
+slug: "ade-goes-to-school"
+summary: "An illustrated reader that turns a short story into chapters with narration, cultural notes, comprehension questions and AI-assisted expansions."
+date: 2026-11-06
+featured: true
+cover: ""
+tags: ["React", "TypeScript", "Vite", "Tailwind CSS", "Gemini"]
+role: "Design and development"
+timeline: "November 2026"
+links:
+  live: "https://ade-s-story.vercel.app"
+  repo: "https://github.com/Browntech24/Ade-s-Story-"
+---
+
+## The brief
+
+The story opens with a sentence a child can read on their own: "Ade goes to school." From there it follows
+eight-year-old Ade out of his home in Ilode, across the red laterite road, through the morning market and
+over the footbridge to the bell of St. Jude's Academy.
+
+A wall of text with a quiz bolted to the end would have flattened all of that. The brief was to make the
+story readable alone or with a parent, and to give a reader who stumbles somewhere to turn: audio, a
+glossary, questions that check understanding, and a reason to keep reading past the last page.
+
+## Approach
+
+- **Read first, chrome second.** Warm paper tones, a serif text column and generous line height. Controls
+  stay out of the way until they are needed: a Listen button, a settings panel, and tabs for chapters,
+  cultural notes, comprehension and the story studio.
+- **Narration that follows the page.** Playback reads one paragraph at a time and highlights the paragraph
+  being spoken, so audio and text never drift apart.
+- **Settings that stick.** Theme, typeface and text size are stored in `localStorage`, so a returning
+  reader gets their own page back rather than the default one.
+- **A glossary, not a footnote dump.** Ten terms — laterite, puff-puff, charcoal iron — each with a
+  pronunciation, a plain definition and a short note on why it matters in the setting.
+- **A way to keep going.** The story studio asks Gemini for a new scene in a chosen tone, or lets a reader
+  put a question to one of the characters.
+
+## How it is built
+
+A React 19 single-page app built with Vite, styled with Tailwind CSS 4, and deployed on Vercel. Story
+content lives in typed data (`StoryChapter`, `GlossaryItem`, `ReflectionQuestion`), which means the
+reader, the quiz, the glossary and the export all read from one source instead of four copies.
+
+The export panel turns the same data into Markdown, plain text or a printed page. That was the cheapest
+useful feature in the project: a parent can hand a child a printable copy without anyone maintaining a
+second document.
+
+Two Express endpoints hold the AI features. `/api/story/expand` writes a new chapter from a prompt, tone
+and focus character; `/api/story/character-qa` answers in a character's voice. They call Gemini 3.8 Flash
+with the setting and cast as a system instruction. Locally they run from `server.ts`; on Vercel a
+catch-all function reuses the same Express app, so there is no second implementation to keep in sync.
+
+Narration uses the browser's speech synthesis, chained paragraph by paragraph:
+
+```ts
+utterance.onend = () => {
+  if (index + 1 < paragraphs.length) {
+    setCurrentParagraphIndex(index + 1);
+    speakCurrentParagraph(index + 1, rate);
+  } else {
+    setIsGloballyPlaying(false);
+  }
+};
+```
+
+One callback turns the Web Speech API into a hands-free chapter player. Each paragraph is its own
+utterance, so skipping, pausing and highlighting stay aligned without hosting or stitching audio files.
+
+## What I learned
+
+- **Browser speech is a good trade.** It costs nothing and starts instantly, but voice quality varies by
+  device and browser. Rate control and visible paragraph sync matter more than picking the perfect voice.
+- **Typed content prevents quiet drift.** Because quiz answers and glossary links derive from the same
+  story object, editing a chapter cannot leave the questions describing a scene that no longer exists.
+- **Keep the API key on the server.** Both AI endpoints stay behind the Express layer, so the client never
+  sees a credential and the failure mode is a clear message rather than a silent empty panel.
+
+The story is live at [ade-s-story.vercel.app](https://ade-s-story.vercel.app), with six chapters, roughly
+1,650 words and ten glossary entries.
