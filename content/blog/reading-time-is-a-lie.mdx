@@ -1,0 +1,51 @@
+---
+title: "Reading time is a lie, but a useful one"
+slug: "reading-time-is-a-lie"
+date: 2026-09-02
+excerpt: "Word-count estimates are wrong in predictable ways. That makes them a decent design tool."
+tags: ["Writing", "Product"]
+cover: ""
+draft: false
+---
+
+Most reading-time widgets divide word count by 200 and round up. The number is presented with the
+confidence of a measurement and the accuracy of a guess.
+
+For a technical post with code, tables and diagrams, 200 words per minute is optimistic. For a short
+essay, it is pessimistic. Nobody reads at a constant rate, and nobody reads your post at all until the
+first paragraph earns it.
+
+## Why keep it anyway
+
+Because the alternative is worse: an unlabeled wall of text.
+
+A reading estimate does three jobs that have nothing to do with literal reading speed:
+
+- **It sets expectations.** "4 min" tells someone whether this fits in the gap before a meeting.
+- **It signals effort.** Authors notice when a draft claims 14 minutes and cut it.
+- **It helps scanning.** A list of posts with times is easier to compare than a list of identical
+  paragraphs.
+
+The value is in the relative ordering, not the absolute number.
+
+## A slightly less dishonest formula
+
+If you must compute it, account for the expensive parts:
+
+````ts
+const words = plainText.split(/\s+/).filter(Boolean).length;
+const codeBlocks = (plainText.match(/```/g)?.length ?? 0) / 2;
+const minutes = Math.max(1, Math.round(words / 220 + codeBlocks * 0.75));
+````
+
+Code is read slower than prose. So are tables. Images cost attention even when they cost no words.
+
+Then label it honestly. "About 4 minutes" is a better promise than "4 min read", because it admits the
+estimate is an estimate.
+
+## The real constraint
+
+The best reading-time widget is a strong opening. If the first two sentences tell someone why the post
+exists, they will stay for as long as it takes.
+
+Everything else is metadata.

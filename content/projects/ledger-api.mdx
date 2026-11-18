@@ -1,0 +1,68 @@
+---
+title: "Ledger API"
+slug: "ledger-api"
+summary: "A double-entry accounting service that survives retries, partial failures and auditors."
+date: 2025-04-02
+featured: true
+cover: ""
+tags: ["Node.js", "PostgreSQL", "Redis", "Kafka"]
+role: "Backend engineer"
+timeline: "2024 – 2025"
+links:
+  live: ""
+  repo: "https://github.com/yourusername/ledger-api"
+---
+
+## Problem
+
+The payments team had grown a balance column and a prayer. Every incident involved the same question:
+which write actually happened? Refunds could be applied twice, reconciliation ran nightly, and nobody
+could explain yesterday's numbers without opening a production console.
+
+We needed an append-only ledger with idempotent writes and a reconciliation job that explained, rather
+than hid, discrepancies.
+
+## Approach
+
+Double-entry accounting is old, well-documented and unforgiving. We leaned on it instead of inventing
+a new state machine:
+
+- Every movement creates two entries that sum to zero.
+- Entries are immutable; corrections are new compensating entries.
+- Balances are projections, never the source of truth.
+- Every external request carries an idempotency key stored in the same transaction as its entries.
+
+The write path is deliberately boring. The interesting part is proving it stays correct.
+
+## Solution
+
+The core write is a single serialisable transaction: validate, insert entries, insert the idempotency
+record, commit. Retries hit a unique constraint and return the original result rather than duplicating
+work.
+
+```sql
+CREATE TABLE ledger_entries (
+  id           bigserial PRIMARY KEY,
+  account_id   uuid NOT NULL,
+  transfer_id  uuid NOT NULL,
+  amount_minor bigint NOT NULL CHECK (amount_minor <> 0),
+  currency     char(3) NOT NULL,
+  created_at   timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX ledger_entry_side
+  ON ledger_entries (transfer_id, account_id, amount_minor > 0);
+```
+
+Balances are rebuilt from entries into a read model, with a nightly job that compares the projection
+against a fresh aggregate. If they disagree, the job pages us with the transfer ids involved instead
+of silently patching the number.
+
+## Results
+
+- Zero duplicate postings across 14 months of retries and region failovers.
+- Reconciliation moved from a four-hour manual ritual to a scheduled job with a two-line summary.
+- Month-end close went from five days to under one.
+
+The most valuable artefact was the runbook: every invariant has a query that proves or disproves it.
+Auditors ask better questions when the answers are one command away.

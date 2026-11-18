@@ -10,19 +10,20 @@ before development and how to work with the repo.
 **Milestone 1 — setup and design system.** Done: App Router scaffold, Tailwind 4 tokens, light/dark
 theme with no flash, base UI components, header/footer, security headers, lint/format/typecheck and CI.
 
-Placeholder content is clearly marked (`lib/site.ts`, `lib/placeholder-data.ts`) and gets replaced by
-the MDX pipeline in milestone 3.
+**Milestone 3 — MDX content pipeline.** Done: `content/projects` and `content/blog` MDX sources,
+Zod-validated frontmatter, statically generated index and detail pages, reading time, draft filtering
+and adjacent-project navigation. Placeholder identity still lives in `lib/site.ts`.
 
 ## Decisions
 
-| Area      | Decision                                                                   |
-| --------- | -------------------------------------------------------------------------- |
-| Framework | Next.js 16.4 (App Router, React 19, async route params)                    |
-| Styling   | Tailwind CSS 4, CSS-first tokens in `app/globals.css`                      |
-| Content   | MDX files in `/content`, parsed with `next-mdx-remote` + Zod (milestone 3) |
-| Contact   | Resend + Upstash rate limiting + honeypot (milestone 6)                    |
-| CSP       | Static header CSP without nonce, to preserve SSG                           |
-| Analytics | Deferred to milestone 8                                                    |
+| Area      | Decision                                                          |
+| --------- | ----------------------------------------------------------------- |
+| Framework | Next.js 16.4 (App Router, React 19, async route params)           |
+| Styling   | Tailwind CSS 4, CSS-first tokens in `app/globals.css`             |
+| Content   | MDX files in `/content`, official `@next/mdx` + Zod (milestone 3) |
+| Contact   | Resend + Upstash rate limiting + honeypot (milestone 6)           |
+| CSP       | Static header CSP without nonce, to preserve SSG                  |
+| Analytics | Deferred to milestone 8                                           |
 
 ## Commands
 
@@ -50,8 +51,26 @@ app/                 routes, layouts, metadata
 components/ui/       design-system primitives
 components/layout/   header, footer, navigation, theme
 components/sections/ page sections
-lib/                 site config, theme helpers, utilities
+content/projects/    project case studies (MDX + YAML frontmatter)
+content/blog/        blog posts (MDX + YAML frontmatter)
+lib/                 site config, content loader, theme helpers, utilities
 ```
+
+## Writing content
+
+Add an MDX file to `content/projects/` or `content/blog/`. The filename is the URL slug, and the
+frontmatter `slug` must match it — the build fails loudly otherwise, as it does for a missing title,
+an invalid date or an empty summary/excerpt.
+
+- Projects: `title`, `slug`, `summary`, `date`, optional `featured`, `cover`, `tags`, `role`,
+  `timeline`, and `links.live` / `links.repo`. Only `featured: true` entries appear on the home page
+  (falling back to the newest projects if none are marked).
+- Posts: `title`, `slug`, `date`, `excerpt`, optional `tags`, `cover` and `draft`.
+- Drafts (`draft: true`) render in `npm run dev` but are excluded from production builds and from
+  the generated route list.
+
+Headings get slug ids (`rehype-slug`), GFM tables and task lists work (`remark-gfm`), and both index
+and detail pages are statically generated at build time.
 
 ## Known constraints
 
@@ -69,5 +88,5 @@ lib/                 site config, theme helpers, utilities
 
 - `lib/site.ts` — name, initials, role, intro, email, domain, social URLs
 - Headshot, project covers, `public/resume.pdf`
-- 3–6 project case studies and 1–2 posts (milestone 3)
+- Replace the sample case studies and posts in `content/` with real writing
 - Domain and real accent assets (milestone 8)

@@ -1,0 +1,72 @@
+---
+title: "Signal Dashboard"
+slug: "signal-dashboard"
+summary: "Real-time fleet analytics for field teams working on connections slower than a text message."
+date: 2025-09-18
+featured: true
+cover: ""
+tags: ["Next.js", "TypeScript", "WebSockets", "MapLibre"]
+role: "Lead frontend engineer"
+timeline: "Jan – Sep 2025"
+links:
+  live: "https://example.com/signal"
+  repo: "https://github.com/yourusername/signal-dashboard"
+---
+
+## Problem
+
+Dispatchers tracked forty delivery vans with a spreadsheet, a phone tree and a whiteboard. Updates
+arrived minutes late, and the people who needed them most — drivers on rural routes — were stuck with
+a desktop-only tool that assumed broadband.
+
+The brief was blunt: make the state of the fleet obvious in under two seconds, on a phone, on a bad
+connection.
+
+## Approach
+
+We started by shadowing two dispatchers for a week. The useful signal was smaller than expected:
+position, next stop, delay, and whether anyone had tried to contact the driver. Everything else was
+noise.
+
+Three constraints shaped the build:
+
+- **Data first, map second.** The list view had to work with JavaScript still loading.
+- **Optimistic presence.** A stale van is worse than a missing one, so we expire positions after 45
+  seconds and say so in the UI.
+- **One socket, many views.** A single multiplexed connection feeds the list, the map and the
+  notification tray.
+
+## Solution
+
+The client subscribes to a compact event stream and keeps a normalised store keyed by vehicle id.
+Map rendering is lazy: the list is the default view, and the map chunk only loads when someone asks
+for it.
+
+```ts
+type VehicleEvent =
+  | { type: "position"; id: string; lat: number; lng: number; at: number }
+  | { type: "status"; id: string; status: "idle" | "en-route" | "delayed"; at: number };
+
+export function applyEvent(state: FleetState, event: VehicleEvent): FleetState {
+  const vehicle = state.byId[event.id];
+  if (!vehicle) return state;
+
+  return {
+    ...state,
+    byId: { ...state.byId, [event.id]: { ...vehicle, ...event } },
+  };
+}
+```
+
+Server rendering handles the first paint: the last known positions are serialised into the page, so
+dispatchers see a populated dashboard before hydration. The socket then takes over without a layout
+shift.
+
+## Results
+
+- Time-to-first-useful-paint dropped from **9.4s to 1.6s** on a throttled 3G profile.
+- Dispatch calls about "where is this van" fell by roughly two thirds in the first month.
+- The map chunk is only requested by 38% of sessions, which keeps the common path cheap.
+
+The bigger lesson was organisational: the dispatchers' four-field model survived every feature
+request. When the model is right, the UI gets simpler on its own.

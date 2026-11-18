@@ -1,0 +1,19 @@
+---
+title: "Notes on building a content pipeline"
+slug: "draft-content-pipeline-notes"
+date: 2026-11-01
+excerpt: "Working notes on schemas, slugs and build-time validation. Unpublished."
+tags: ["MDX", "Tooling"]
+cover: ""
+draft: true
+---
+
+This post exists to prove that drafts are excluded from production builds.
+
+## The checklist
+
+- Frontmatter is validated at build time.
+- Slugs come from filenames, not from copy-pasted metadata.
+- A bad date fails the build instead of rendering "Invalid Date".
+
+If you can see this in production, the filter is broken.

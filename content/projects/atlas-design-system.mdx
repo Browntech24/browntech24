@@ -1,0 +1,69 @@
+---
+title: "Atlas Design System"
+slug: "atlas-design-system"
+summary: "Tokens, primitives and guardrails that let six product teams ship consistent, accessible UI."
+date: 2024-11-12
+featured: true
+cover: ""
+tags: ["React", "TypeScript", "Storybook", "a11y"]
+role: "Design systems engineer"
+timeline: "2023 – 2024"
+links:
+  live: "https://example.com/atlas"
+  repo: "https://github.com/yourusername/atlas"
+---
+
+## Problem
+
+Six product teams had six button components, three date pickers and no shared definition of "small".
+Accessibility fixes landed in one surface and regressed in another. Design reviews had become
+archaeology.
+
+A component library alone would not fix this. The missing piece was a decision record that both design
+and engineering could point at.
+
+## Approach
+
+We treated the system as a product with two customers: the teams using it and the people using the
+resulting interfaces. That meant:
+
+- **Tokens before components.** Colour, spacing, radius and type scale defined once, consumed
+  everywhere, with contrast checked at the token level.
+- **Behaviour specified, not just styled.** Every component shipped with keyboard, screen-reader and
+  focus notes.
+- **Escape hatches documented.** When a team needed to deviate, they filed a request instead of
+  forking.
+
+## Solution
+
+The package exports primitives plus a small set of layout helpers. Interactive components are built on
+native elements first; ARIA only appears where the platform falls short.
+
+```tsx
+export function Switch({ checked, onChange, label }: SwitchProps) {
+  return (
+    <label className="flex items-center gap-3">
+      <input
+        type="checkbox"
+        role="switch"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+        className="size-5 accent-[var(--accent)]"
+      />
+      <span>{label}</span>
+    </label>
+  );
+}
+```
+
+Token changes flow through a single CSS variable layer, so a theme tweak does not require a release per
+app. Storybook runs axe on every story in CI, and a visual regression job catches accidental drift.
+
+## Results
+
+- Component duplication fell from 41 local implementations to 12 shared primitives.
+- Accessibility violations in automated audits dropped by 87% across the four largest surfaces.
+- New screens are assembled in hours; design review now debates behaviour instead of hex codes.
+
+The system did not make teams faster on day one. It made them faster in month three, once the
+guardrails and the documentation had earned trust.

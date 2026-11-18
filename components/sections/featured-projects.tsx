@@ -1,12 +1,15 @@
 import Link from "next/link";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
+import { ProjectCard } from "@/components/ui/project-card";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { Tag } from "@/components/ui/tag";
-import { placeholderProjects } from "@/lib/placeholder-data";
+import { getFeaturedProjects } from "@/lib/content";
 
-export function FeaturedProjects() {
+export async function FeaturedProjects() {
+  const projects = await getFeaturedProjects(3);
+
+  if (projects.length === 0) return null;
+
   return (
     <section aria-labelledby="featured-projects-heading" className="py-20 sm:py-24">
       <Container>
@@ -15,7 +18,7 @@ export function FeaturedProjects() {
             id="featured-projects-heading"
             eyebrow="Selected work"
             title="Featured projects"
-            description="A few problems worth solving. Full case studies are on the way."
+            description="A few problems worth solving, written up as full case studies."
           />
           <Link
             href="/projects"
@@ -26,28 +29,9 @@ export function FeaturedProjects() {
         </div>
 
         <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {placeholderProjects.map((project) => (
+          {projects.map((project) => (
             <li key={project.slug}>
-              <Card className="h-full overflow-hidden">
-                <div
-                  aria-hidden="true"
-                  className="aspect-[16/10] border-b border-border bg-[radial-gradient(120%_120%_at_0%_0%,var(--accent-subtle),var(--surface-2))]"
-                />
-                <CardContent className="pt-5">
-                  {/* Static until the MDX pipeline lands in M4. */}
-                  <h3 className="text-lg font-semibold tracking-tight">{project.title}</h3>
-                  <p className="mt-2 text-sm text-pretty text-muted-foreground">
-                    {project.summary}
-                  </p>
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <li key={tag}>
-                        <Tag>{tag}</Tag>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+              <ProjectCard project={project} />
             </li>
           ))}
         </ul>

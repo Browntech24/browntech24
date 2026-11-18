@@ -1,3 +1,4 @@
+import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
@@ -42,6 +43,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
   // The home directory contains another lockfile; keep Turbopack rooted here.
   turbopack: {
     root: process.cwd(),
@@ -59,4 +61,15 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+/**
+ * Turbopack requires plugin names as strings (JS functions can't cross into the
+ * Rust MDX compiler). Options must be serializable for the same reason.
+ */
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: ["remark-frontmatter", "remark-mdx-frontmatter", "remark-gfm"],
+    rehypePlugins: ["rehype-slug"],
+  },
+});
+
+export default withMDX(nextConfig);

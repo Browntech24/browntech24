@@ -1,0 +1,81 @@
+---
+title: "A theme toggle that never flashes"
+slug: "theme-toggle-without-flash"
+date: 2026-10-14
+excerpt: "The wrong theme for one frame is a bug people feel but rarely report. Here is the smallest reliable fix."
+tags: ["Next.js", "Accessibility", "Performance"]
+cover: ""
+draft: false
+---
+
+Every dark-mode site has the same failure mode: a white flash on load. It lasts a few hundred
+milliseconds, it is impossible to screenshot reliably, and it makes an otherwise polished product feel
+cheap.
+
+The cause is simple. Your theme lives in `localStorage`, and `localStorage` is only readable after
+JavaScript runs. By then the browser has already painted something.
+
+## The fix is one blocking script
+
+Put a tiny inline script at the top of the document, before any content. It reads the saved choice,
+falls back to the system preference, and sets a data attribute on the root element:
+
+```js
+(function () {
+  try {
+    const stored = localStorage.getItem("theme");
+    const dark =
+      stored === "dark" ||
+      (stored !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+    const root = document.documentElement;
+    root.dataset.theme = dark ? "dark" : "light";
+    root.style.colorScheme = dark ? "dark" : "light";
+  } catch {}
+})();
+```
+
+Three details matter more than the code:
+
+1. **It runs before paint.** In the App Router, the first child of `body` is early enough.
+2. **It sets `color-scheme`.** Without it, form controls and scrollbars stay light.
+3. **It fails open.** Storage can throw in private mode; the page should still render.
+
+## Then make CSS own the theme
+
+With a `data-theme` attribute in place, the visual switch is a variable swap:
+
+```css
+:root {
+  --background: #ffffff;
+  --foreground: #0c1512;
+}
+
+[data-theme="dark"] {
+  --background: #0a100e;
+  --foreground: #edf4f1;
+}
+```
+
+No JavaScript is involved in rendering the correct colours. React only needs to update the attribute
+when someone clicks the toggle.
+
+## Treat hydration honestly
+
+The server cannot know which theme the visitor will pick, so it must not pretend to. Suppress the
+attribute mismatch on the root element, then read the resolved value on the client:
+
+```tsx
+const theme = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, getServerThemeSnapshot);
+```
+
+`getServerThemeSnapshot` returns a stable default. React uses it during hydration and re-reads the live
+value immediately after, which avoids both a warning and a second visible flash.
+
+## What about the system preference changing?
+
+If the visitor has never chosen explicitly, keep following the OS. Listen for the media query and
+re-apply the theme without writing to storage. The moment they click the toggle, their choice wins —
+that is the only state you should persist.
+
+The whole mechanism is under 40 lines. It is also the difference between a site that feels designed and
+one that feels assembled.
