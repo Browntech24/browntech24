@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* The theme is driven by a data attribute so the no-flash script can resolve
+   system preference before first paint. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-card: 1rem;
+  --container-content: 68.75rem; /* 1100px */
+}
+
+/* `inline` keeps the utilities pointing at the runtime CSS variables so a
+   single class works in both themes. */
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+
+    --background: #ffffff;
+    --surface: #f7f9f8;
+    --surface-2: #edf2f0;
+    --foreground: #0c1512;
+    --muted-foreground: #52625d;
+    --border: #dde5e2;
+    --accent: #0f766e;
+    --accent-hover: #115e59;
+    --accent-foreground: #ffffff;
+    --accent-subtle: #e4f4f0;
+    --ring: #0f766e;
+  }
+
+  [data-theme="dark"] {
+    color-scheme: dark;
+
+    --background: #0a100e;
+    --surface: #111917;
+    --surface-2: #18231f;
+    --foreground: #edf4f1;
+    --muted-foreground: #a3b3ae;
+    --border: #24312d;
+    --accent: #2dd4bf;
+    --accent-hover: #5eead4;
+    --accent-foreground: #04211d;
+    --accent-subtle: #0f2f2a;
+    --ring: #2dd4bf;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    background-color: var(--background);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background-color: var(--accent-subtle);
+    color: var(--foreground);
+  }
+
+  /* Visible focus for keyboard users everywhere, without doubling up in
+     individual components. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Anchored headings shouldn't hide under the sticky header. */
+  [id] {
+    scroll-margin-top: 5.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
