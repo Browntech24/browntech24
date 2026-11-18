@@ -20,7 +20,7 @@ export function SiteHeader() {
           >
             {site.initials}
           </span>
-          <span>{site.name}</span>
+          <span>{site.brand}</span>
         </Link>
 
         <nav aria-label="Main" className="hidden md:block">

@@ -23,13 +23,15 @@ function resolveSiteUrl() {
 }
 
 export const site = {
-  name: "Your Name",
-  initials: "YN",
+  /** Wordmark used in the header and as the site name in metadata. */
+  brand: "Brown Portfolio",
+  name: "Eugene Brown",
+  initials: "EB",
   role: "Full-stack developer building fast, accessible web apps",
   intro:
     "I turn complex problems into simple, reliable products — from the first wireframe to the last deploy.",
   description:
-    "Portfolio of Your Name, a full-stack developer focused on performance, accessibility and thoughtful interface design.",
+    "Portfolio of Eugene Brown, a full-stack developer focused on performance, accessibility and thoughtful interface design.",
   email: "hello@example.com",
   url: resolveSiteUrl(),
   nav: [

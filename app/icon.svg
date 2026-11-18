@@ -1,4 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Your Name">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Eugene Brown">
   <rect width="64" height="64" rx="14" fill="#0f766e" />
-  <path d="M18 45V19h6.5L40 37.5V19h6v26h-6.5L26 26.5V45z" fill="#ffffff" />
+  <text
+    x="32"
+    y="46"
+    text-anchor="middle"
+    font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-size="40"
+    font-weight="700"
+    fill="#ffffff"
+  >B</text>
 </svg>

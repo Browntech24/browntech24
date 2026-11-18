@@ -1,6 +1,7 @@
-# My Portfolio
+# Brown Portfolio
 
-Personal portfolio and writing site: Next.js (App Router), TypeScript, Tailwind CSS 4, MDX content.
+Personal portfolio and writing site for Eugene Brown: Next.js (App Router), TypeScript, Tailwind CSS 4,
+MDX content.
 
 The full specification lives in [`spec.md`](./spec.md). This README records the decisions made
 before development and how to work with the repo.
@@ -12,7 +13,8 @@ theme with no flash, base UI components, header/footer, security headers, lint/f
 
 **Milestone 3 — MDX content pipeline.** Done: `content/projects` and `content/blog` MDX sources,
 Zod-validated frontmatter, statically generated index and detail pages, reading time, draft filtering
-and adjacent-project navigation. Placeholder identity still lives in `lib/site.ts`.
+and adjacent-project navigation. Brand and professional name are set in `lib/site.ts`; the email,
+domain and social URLs there are still placeholders.
 
 ## Decisions
 
