@@ -117,17 +117,26 @@ and detail pages are statically generated at build time.
 
 ## Deployment
 
-The site is deployed to Vercel as the project `browntech24` (team `brown-5ac6`).
+The site lives at https://browntech24.vercel.app, in the Vercel project `browntech24` (team
+`brown-5ac6`), connected to the GitHub repo [Browntech24/browntech24](https://github.com/Browntech24/browntech24)
+with `main` as the production branch. Every push to `main` builds and deploys automatically; the
+project also builds a preview for every pull request.
+
+To deploy by hand (for example when only environment variables change):
 
 ```bash
-vercel link --yes --scope brown-5ac6 --project browntech24
-vercel env add NEXT_PUBLIC_SITE_URL --environment production,preview \
-  --value "https://browntech24.vercel.app"
 vercel deploy --prod --yes
 ```
 
 `NEXT_PUBLIC_SITE_URL` is inlined at build time, so change it and redeploy whenever the domain
-changes. Deployment protection (Vercel Authentication) is turned off so the site is public; preview
+changes:
+
+```bash
+vercel env add NEXT_PUBLIC_SITE_URL --environment production,preview \
+  --value "https://browntech24.vercel.app"
+```
+
+Deployment protection (Vercel Authentication) is turned off so the site is public; preview
 deployments are still `noindex` via the `X-Robots-Tag` header.
 
 ## Known constraints
