@@ -6,6 +6,9 @@ import type { Project } from "@/lib/content";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
+/** The fields a card needs; keeps client filters from shipping MDX components. */
+export type ProjectCardData = Pick<Project, "slug" | "title" | "summary" | "date" | "tags">;
+
 function initials(title: string) {
   return title
     .split(/\s+/)
@@ -16,7 +19,7 @@ function initials(title: string) {
 }
 
 type ProjectCardProps = {
-  project: Project;
+  project: ProjectCardData;
   /** Match the surrounding document outline: h2 on indexes, h3 inside sections. */
   titleAs?: "h2" | "h3";
   className?: string;

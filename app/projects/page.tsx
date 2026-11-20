@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
+import { ProjectExplorer } from "@/components/sections/project-explorer";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
-import { ProjectCard } from "@/components/ui/project-card";
 import { getAllProjects } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -13,7 +13,13 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectsPage() {
-  const projects = await getAllProjects();
+  const projects = (await getAllProjects()).map((project) => ({
+    slug: project.slug,
+    title: project.title,
+    summary: project.summary,
+    date: project.date,
+    tags: project.tags,
+  }));
 
   return (
     <>
@@ -27,13 +33,7 @@ export default async function ProjectsPage() {
         {projects.length === 0 ? (
           <p className="text-muted-foreground">No projects yet.</p>
         ) : (
-          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <li key={project.slug}>
-                <ProjectCard project={project} titleAs="h2" />
-              </li>
-            ))}
-          </ul>
+          <ProjectExplorer projects={projects} />
         )}
       </Container>
     </>
