@@ -20,9 +20,17 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border">
       <Container className="flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-muted-foreground">
-          © {year} {site.name}. All rights reserved.
-        </p>
+        <div className="flex flex-wrap items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            © {year} {site.name}. All rights reserved.
+          </p>
+          <a
+            href="/rss.xml"
+            className="text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+          >
+            RSS
+          </a>
+        </div>
 
         <ul className="flex items-center gap-1">
           {site.socials.map((social) => {

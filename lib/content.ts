@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
+import GithubSlugger from "github-slugger";
 import type { MDXComponents } from "mdx/types";
 import type { ComponentType } from "react";
 import { z } from "zod";
@@ -67,8 +68,15 @@ export type Post = z.infer<typeof postFrontmatterSchema> & {
   readingTimeMinutes: number;
 };
 
+export type Heading = {
+  id: string;
+  text: string;
+  level: 2 | 3;
+};
+
 export type PostEntry = Post & {
   Content: MdxContent;
+  headings: Heading[];
 };
 
 type MdxModule = {
@@ -134,6 +142,45 @@ function estimateReadingTime(source: string): number {
 
   const words = body.split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.ceil(words / 220));
+}
+
+/**
+ * Headings for the table of contents. Slugs come from github-slugger, the same
+ * library rehype-slug uses, so the links match the ids in the rendered MDX.
+ */
+function extractHeadings(source: string): Heading[] {
+  const body = source.replace(/^---[\s\S]*?---/, "");
+  const slugger = new GithubSlugger();
+  const headings: Heading[] = [];
+  let inFence = false;
+
+  for (const line of body.split("\n")) {
+    if (/^\s*(```|~~~)/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
+
+    const match = /^(#{2,3})\s+(.+?)\s*#*\s*$/.exec(line);
+    if (!match) continue;
+
+    const [, hashes = "##", raw = ""] = match;
+    const text = raw
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      .replace(/[`*_~]/g, "")
+      .trim();
+
+    if (!text) continue;
+
+    headings.push({
+      id: slugger.slug(text),
+      text,
+      level: hashes.length === 2 ? 2 : 3,
+    });
+  }
+
+  return headings;
 }
 
 async function importProjectModule(slug: string): Promise<MdxModule> {
@@ -238,6 +285,7 @@ function loadPost(slug: string): Promise<PostEntry> {
     return {
       ...frontmatter,
       readingTimeMinutes: estimateReadingTime(source),
+      headings: extractHeadings(source),
       Content: mdxModule.default,
     };
   })();

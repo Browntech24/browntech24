@@ -89,6 +89,16 @@
   [id] {
     scroll-margin-top: 5.5rem;
   }
+
+  /* Dual-theme syntax highlighting from rehype-pretty-code. Tokens carry both
+     palettes as custom properties, so the theme switch stays CSS-only. */
+  .shiki span {
+    color: var(--shiki-light);
+  }
+
+  [data-theme="dark"] .shiki span {
+    color: var(--shiki-dark);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
