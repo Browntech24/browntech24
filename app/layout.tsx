@@ -43,6 +43,7 @@ export const metadata: Metadata = {
     title,
     description: site.description,
     locale: "en_US",
+    url: "/",
   },
   twitter: {
     card: "summary_large_image",
