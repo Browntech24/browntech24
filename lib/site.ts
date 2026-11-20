@@ -28,6 +28,8 @@ export const site = {
   name: "Eugene Brown",
   initials: "EB",
   role: "Full-stack developer building fast, accessible web apps",
+  /** Shown next to the hero's availability badge. */
+  aiRole: "AI Engineer",
   intro:
     "I turn complex problems into simple, reliable products — from the first wireframe to the last deploy.",
   description:

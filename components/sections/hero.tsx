@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 import { ButtonLink, buttonVariants } from "@/components/ui/button";
@@ -17,10 +17,17 @@ export function Hero() {
       />
 
       <Container className="relative py-20 sm:py-28">
-        <p className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1 text-xs font-medium text-muted-foreground">
-          <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
-          Open to new opportunities
-        </p>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1 text-xs font-medium text-muted-foreground">
+            <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
+            Open to new opportunities
+          </p>
+
+          <p className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent-subtle px-3 py-1 text-xs font-medium text-accent">
+            <Sparkles aria-hidden="true" className="size-3.5" />
+            {site.aiRole}
+          </p>
+        </div>
 
         <h1
           id="hero-heading"
