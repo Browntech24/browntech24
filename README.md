@@ -3,6 +3,8 @@
 Personal portfolio and writing site for Eugene Brown: Next.js (App Router), TypeScript, Tailwind CSS 4,
 MDX content.
 
+**Live:** https://browntech24.vercel.app
+
 The full specification lives in [`spec.md`](./spec.md). This README records the decisions made
 before development and how to work with the repo.
 
@@ -113,6 +115,21 @@ and detail pages are statically generated at build time.
   link is the first stop.
 - All routes are static except `/api/contact`.
 
+## Deployment
+
+The site is deployed to Vercel as the project `browntech24` (team `brown-5ac6`).
+
+```bash
+vercel link --yes --scope brown-5ac6 --project browntech24
+vercel env add NEXT_PUBLIC_SITE_URL --environment production,preview \
+  --value "https://browntech24.vercel.app"
+vercel deploy --prod --yes
+```
+
+`NEXT_PUBLIC_SITE_URL` is inlined at build time, so change it and redeploy whenever the domain
+changes. Deployment protection (Vercel Authentication) is turned off so the site is public; preview
+deployments are still `noindex` via the `X-Robots-Tag` header.
+
 ## Known constraints
 
 - **Contact delivery is not configured.** Without `RESEND_API_KEY` the endpoint returns `503` with a
@@ -128,4 +145,13 @@ and detail pages are statically generated at build time.
 - `lib/site.ts` — LinkedIn and X profiles (GitHub and email are already set)
 - A headshot (the about page currently uses an initials monogram)
 - `public/resume.pdf` if your CV changes
-- A custom domain
+- A custom domain (`browntech24.vercel.app` works today)
+
+## Remaining manual steps
+
+1. Add `RESEND_API_KEY` (plus optional `CONTACT_TO_EMAIL` / `CONTACT_FROM_EMAIL`) so the contact form
+   delivers mail instead of showing the direct-email fallback.
+2. Add Upstash Redis credentials for rate limiting that survives across instances.
+3. Add LinkedIn and X links in `lib/site.ts` and the footer.
+4. Attach a headshot in place of the initials monogram on the about page.
+5. Point a custom domain at the project once you own one.
