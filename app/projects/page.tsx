@@ -4,12 +4,29 @@ import { ProjectExplorer } from "@/components/sections/project-explorer";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
 import { getAllProjects } from "@/lib/content";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Projects",
   description:
     "Case studies on performance, reliability and design systems — what the problem was and what changed.",
   alternates: { canonical: "/projects" },
+  openGraph: {
+    type: "website",
+    siteName: site.brand,
+    locale: "en_US",
+    title: "Projects",
+    description:
+      "Case studies on performance, reliability and design systems — what the problem was and what changed.",
+    url: "/projects",
+    images: ["/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Projects",
+    description:
+      "Case studies on performance, reliability and design systems — what the problem was and what changed.",
+  },
 };
 
 export default async function ProjectsPage() {

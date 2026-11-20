@@ -4,11 +4,14 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 
 import { ButtonLink } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { GitHubIcon } from "@/components/ui/social-icons";
 import { Tag } from "@/components/ui/tag";
 import { getAdjacentProjects, getProject, getProjectSlugs } from "@/lib/content";
 import { formatDate } from "@/lib/format";
+import { site } from "@/lib/site";
+import { projectJsonLd } from "@/lib/structured-data";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -32,9 +35,18 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     alternates: { canonical: `/projects/${project.slug}` },
     openGraph: {
       type: "article",
+      siteName: site.brand,
+      locale: "en_US",
       title: project.title,
       description: project.summary,
+      url: `/projects/${project.slug}`,
       publishedTime: project.date,
+      images: [`/projects/${project.slug}/opengraph-image`],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.summary,
     },
   };
 }
@@ -50,6 +62,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <article>
+      <JsonLd data={projectJsonLd(project)} />
       <header className="border-b border-border bg-surface/60">
         <Container className="py-16 sm:py-20">
           <Link

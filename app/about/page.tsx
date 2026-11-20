@@ -15,6 +15,22 @@ export const metadata: Metadata = {
   description:
     "Eugene Brown is a full-stack developer building fast, accessible web applications with React, Next.js and Node.js.",
   alternates: { canonical: "/about" },
+  openGraph: {
+    type: "website",
+    siteName: site.brand,
+    locale: "en_US",
+    title: "About",
+    description:
+      "Eugene Brown is a full-stack developer building fast, accessible web applications with React, Next.js and Node.js.",
+    url: "/about",
+    images: ["/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About",
+    description:
+      "Eugene Brown is a full-stack developer building fast, accessible web applications with React, Next.js and Node.js.",
+  },
 };
 
 export default function AboutPage() {

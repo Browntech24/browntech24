@@ -4,12 +4,29 @@ import { PostExplorer } from "@/components/sections/post-explorer";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
 import { getAllPosts } from "@/lib/content";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Blog",
   description:
     "Notes on performance, accessibility, content pipelines and the unglamorous parts of shipping software.",
   alternates: { canonical: "/blog" },
+  openGraph: {
+    type: "website",
+    siteName: site.brand,
+    locale: "en_US",
+    title: "Blog",
+    description:
+      "Notes on performance, accessibility, content pipelines and the unglamorous parts of shipping software.",
+    url: "/blog",
+    images: ["/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog",
+    description:
+      "Notes on performance, accessibility, content pipelines and the unglamorous parts of shipping software.",
+  },
 };
 
 export default async function BlogPage() {

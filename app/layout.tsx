@@ -4,7 +4,9 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { JsonLd } from "@/components/seo/json-ld";
 import { site } from "@/lib/site";
+import { personJsonLd } from "@/lib/structured-data";
 import { themeScript } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +36,7 @@ export const metadata: Metadata = {
   applicationName: site.brand,
   authors: [{ name: site.name }],
   creator: site.name,
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     siteName: site.brand,
@@ -59,8 +62,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn(inter.variable, jetbrainsMono.variable)}>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+      className={cn(inter.variable, jetbrainsMono.variable)}
+    >
       <body className="flex min-h-dvh flex-col bg-background text-foreground antialiased">
+        <JsonLd data={personJsonLd()} />
         {/* Must stay the first element in <body> so it runs before paint. */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
 

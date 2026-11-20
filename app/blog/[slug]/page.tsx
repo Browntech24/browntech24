@@ -4,12 +4,14 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { ShareLinks } from "@/components/blog/share-links";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { TableOfContents } from "@/components/ui/table-of-contents";
 import { Tag } from "@/components/ui/tag";
 import { getPost, getPublishedPostSlugs } from "@/lib/content";
 import { formatDate } from "@/lib/format";
 import { site } from "@/lib/site";
+import { blogPostingJsonLd } from "@/lib/structured-data";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
@@ -33,10 +35,19 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       type: "article",
+      siteName: site.brand,
+      locale: "en_US",
       title: post.title,
       description: post.excerpt,
+      url: `/blog/${post.slug}`,
       publishedTime: post.date,
       tags: post.tags,
+      images: [`/blog/${post.slug}/opengraph-image`],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
     },
   };
 }
@@ -51,6 +62,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <article className="py-14 sm:py-20">
+      <JsonLd data={blogPostingJsonLd(post)} />
       <Container>
         <div className="mx-auto max-w-3xl">
           <Link
