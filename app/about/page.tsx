@@ -147,7 +147,7 @@ export default function AboutPage() {
                 Prefer a conversation?{" "}
                 <a
                   href="/contact"
-                  className="font-medium text-accent underline-offset-4 hover:underline"
+                  className="-my-1 inline-block py-1 font-medium text-accent underline-offset-4 hover:underline"
                 >
                   Use the contact page
                   <ArrowRight aria-hidden="true" className="ml-1 inline size-3" />

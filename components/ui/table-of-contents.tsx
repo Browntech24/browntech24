@@ -24,7 +24,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
           <li key={heading.id} className={cn(heading.level === 3 && "pl-4")}>
             <a
               href={`#${heading.id}`}
-              className="text-muted-foreground transition-colors hover:text-accent"
+              className="inline-block py-1 text-muted-foreground transition-colors hover:text-accent"
             >
               {heading.text}
             </a>

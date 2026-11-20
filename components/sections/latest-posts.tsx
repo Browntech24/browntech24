@@ -26,7 +26,7 @@ export async function LatestPosts() {
           />
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-sm font-medium text-accent underline-offset-4 hover:underline"
+            className="-my-1 inline-flex items-center gap-2 py-1 text-sm font-medium text-accent underline-offset-4 hover:underline"
           >
             All posts
             <ArrowRight aria-hidden="true" className="size-4" />

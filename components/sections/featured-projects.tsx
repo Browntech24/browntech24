@@ -22,7 +22,7 @@ export async function FeaturedProjects() {
           />
           <Link
             href="/projects"
-            className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+            className="-my-1 inline-block py-1 text-sm font-medium text-accent underline-offset-4 hover:underline"
           >
             All projects
           </Link>

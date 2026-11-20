@@ -38,7 +38,7 @@ export async function POST(request: Request) {
   const values = parsed.data;
 
   // Honeypot: accept without sending so automated submissions learn nothing.
-  if (values.company.trim().length > 0) {
+  if ((values.company ?? "").length > 0) {
     return NextResponse.json({ ok: true });
   }
 

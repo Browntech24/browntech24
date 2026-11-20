@@ -26,7 +26,7 @@ export function SiteFooter() {
           </p>
           <a
             href="/rss.xml"
-            className="text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+            className="-my-1 inline-block py-1 text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
           >
             RSS
           </a>

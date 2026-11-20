@@ -67,7 +67,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="mx-auto max-w-3xl">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="-my-1 inline-flex items-center gap-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft aria-hidden="true" className="size-4" />
             All posts
@@ -106,7 +106,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <footer className="mt-14 flex flex-col gap-6 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-accent-hover"
+              className="-my-1 inline-flex items-center gap-2 py-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover"
             >
               <ArrowLeft aria-hidden="true" className="size-4" />
               Back to all posts

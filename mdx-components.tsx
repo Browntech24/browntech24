@@ -91,7 +91,7 @@ const components: MDXComponents = {
   pre: ({ className, ...props }) => (
     <pre
       className={cn(
-        "my-7 overflow-x-auto rounded-card border border-border bg-surface p-4 font-mono text-[13px] leading-6 text-foreground [&>code]:bg-transparent [&>code]:p-0 [&>code]:text-inherit",
+        "my-7 overflow-x-auto rounded-card border border-border bg-surface p-4 font-mono text-[13px] leading-6 text-foreground [&>code]:bg-transparent [&>code]:p-0 [&>code]:text-[13px]!",
         className,
       )}
       {...props}

@@ -53,7 +53,7 @@ export default function ContactPage() {
                 <li>
                   <a
                     href={`mailto:${site.email}`}
-                    className="flex items-start gap-3 text-muted-foreground transition-colors hover:text-foreground"
+                    className="-my-1 flex items-start gap-3 py-1 text-muted-foreground transition-colors hover:text-foreground"
                   >
                     <Mail aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-accent" />
                     <span className="break-all">{site.email}</span>
@@ -65,7 +65,7 @@ export default function ContactPage() {
                       href={github.href}
                       target="_blank"
                       rel="noreferrer noopener"
-                      className="flex items-start gap-3 text-muted-foreground transition-colors hover:text-foreground"
+                      className="-my-1 flex items-start gap-3 py-1 text-muted-foreground transition-colors hover:text-foreground"
                     >
                       <GitHubIcon
                         aria-hidden="true"

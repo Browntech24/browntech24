@@ -23,7 +23,7 @@ export function AboutTeaser() {
             <p className="mt-5 max-w-2xl text-pretty text-muted-foreground">{profile.bio[0]}</p>
             <Link
               href="/about"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-accent underline-offset-4 hover:underline"
+              className="-my-1 inline-flex items-center gap-2 py-1 text-sm font-medium text-accent underline-offset-4 hover:underline"
             >
               More about me
               <ArrowRight aria-hidden="true" className="size-4" />

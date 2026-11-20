@@ -6,7 +6,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
-import { contactFormSchema, type ContactField } from "@/lib/validators";
+import type { ContactField } from "@/lib/validators";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -61,6 +61,9 @@ export function ContactForm() {
       company: String(data.get("company") ?? ""),
     };
 
+    // The schema is loaded on demand: validation only matters once someone
+    // actually submits, and it keeps the page's JavaScript budget small.
+    const { contactFormSchema } = await import("@/lib/validators");
     const parsed = contactFormSchema.safeParse(values);
 
     if (!parsed.success) {

@@ -67,7 +67,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <Container className="py-16 sm:py-20">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="-my-1 inline-flex items-center gap-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft aria-hidden="true" className="size-4" />
             All projects
